@@ -14,11 +14,12 @@ use App\Http\Controllers\ProductController;
 |
 */
 
+// Product routes
+
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('products.index');
 });
 
-// Product routes
 Route::get('/products', [ProductController::class, "index"])->name('products.index');
 
 Route::get('/products/create', [ProductController::class, "create"])->name('products.create');
