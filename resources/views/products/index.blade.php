@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">產品</div>
+                    <div class="card-header">產品列表</div>
 
                     <div class="card-body">
 
@@ -39,11 +39,22 @@
                             <tbody>
                                 @foreach ($products as $product)
                                     <tr>
-                                        <td>{{ $product->name }}</td>
-                                        <td>{{ $product->price }}</td>
+                                        <td>
+                                            <span class="name">{{ $product->name }}</span>
+                                            <input type="text" class="edit-name" value="{{ $product->name }}"
+                                                style="display: none;">
+                                        </td>
+                                        <td>
+                                            <span class="price">{{ $product->price }}</span>
+                                            <input type="number" class="edit-price" value="{{ $product->price }}"
+                                                style="display: none;">
+                                        </td>
                                         <td>
                                             <button class="btn btn-secondary edit-button"
                                                 data-id="{{ $product->id }}">編輯</button>
+                                            <button class="btn btn-primary save-button" data-id="{{ $product->id }}"
+                                                style="display: none;">確認修改</button>
+                                            <button class="btn btn-danger cancel-button" style="display: none;">取消</button>
                                             <button class="btn btn-danger delete-button"
                                                 data-id="{{ $product->id }}">刪除</button>
                                         </td>
@@ -82,25 +93,48 @@
             });
         });
 
-        // 當點選「編輯」按鈕時，呼叫 API 並顯示編輯表單
+        // 當點選「編輯」按鈕時，顯示輸入欄位和「確認修改」、「取消」按鈕
         $('.edit-button').click(function() {
-            var id = $(this).data('id');
+            var row = $(this).closest('tr');
+            row.find('.edit-name, .edit-price, .save-button, .cancel-button').show();
+            row.find('.name, .price, .edit-button, .delete-button').hide();
+        });
+
+        // 當點選「確認修改」按鈕時，呼叫 API 並更新商品
+        $('.save-button').click(function() {
+            var row = $(this).closest('tr');
+            var productId = $(this).data('id');
             $.ajax({
-                url: '/api/products/' + id,
-                type: 'GET',
+                url: '/api/products/' + productId,
+                type: 'PUT',
+                data: {
+                    name: row.find('.edit-name').val(),
+                    price: row.find('.edit-price').val()
+                },
                 success: function(data) {
-                    $('#edit-name').val(data.name);
-                    $('#edit-price').val(data.price);
-                    $('#edit-product-form').show();
+                    row.find('.name').text(data.name);
+                    row.find('.price').text(data.price);
+                    // 隱藏輸入欄位
+                    row.find('.edit-name, .edit-price, .save-button, .cancel-button')
+                        .hide();
+                    // 顯示「確認修改」、「取消」按鈕
+                    row.find('.name, .price, .edit-button, .delete-button').show();
                 }
             });
         });
 
+        // 當點選「取消」按鈕時，隱藏輸入欄位和「確認修改」、「取消」按鈕
+        $('.cancel-button').click(function() {
+            var row = $(this).closest('tr');
+            row.find('.edit-name, .edit-price, .save-button, .cancel-button').hide();
+            row.find('.name, .price, .edit-button, .delete-button').show();
+        });
+
         // 當點選「刪除」按鈕時，呼叫 API 並刪除商品
         $('.delete-button').click(function() {
-            var id = $(this).data('id');
+            var productId = $(this).data('id');
             $.ajax({
-                url: '/api/products/' + id,
+                url: '/api/products/' + productId,
                 type: 'DELETE',
                 success: function(data) {
                     alert('商品已刪除');
