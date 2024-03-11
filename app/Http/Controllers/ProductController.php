@@ -13,15 +13,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        return view('products.index', ['products' => $products]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json($products);
     }
 
     /**
@@ -45,13 +37,6 @@ class ProductController extends Controller
     public function show(string $id)
     {
         //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
     }
 
     /**

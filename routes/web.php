@@ -20,6 +20,4 @@ Route::get('/', function () {
     return redirect()->route('products.index');
 });
 
-Route::get('/products', [ProductController::class, "index"])->name('products.index');
-
-Route::get('/products/create', [ProductController::class, "create"])->name('products.create');
+Route::view('/products', 'products.index')->name('products.index');
