@@ -4,15 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Service\ProductService;
 
 class ProductController extends Controller
 {
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
+        $keyword = $request->input('name');
+        $minPrice = $request->input('minPrice');
+        $maxPrice = $request->input('maxPrice');
+
+        $products = $this->productService->search($keyword, $minPrice, $maxPrice);
+
         return response()->json($products);
     }
 
