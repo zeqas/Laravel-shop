@@ -14,7 +14,10 @@ class ProductController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * 產品列表 包括搜尋功能
+     * @bodyParam name string 產品名稱. Example: Apple
+     * @bodyParam minPrice float 最低價格. Example: 1
+     * @bodyParam maxPrice float 最高價格. Example: 1000
      */
     public function index(Request $request)
     {
@@ -28,7 +31,9 @@ class ProductController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 新增產品
+     * @bodyParam name string 限制100字元
+     * @bodyParam price integer 限制1以上
      */
     public function store(Request $request)
     {
@@ -43,7 +48,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * 產品詳細資訊
      */
     public function show(string $id)
     {
@@ -51,7 +56,9 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * 更新產品資訊
+     * @bodyParam name string 限制100字元
+     * @bodyParam price integer 限制1以上
      */
     public function update(Request $request, Product $product)
     {
@@ -66,7 +73,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 刪除產品
      */
     public function destroy(string $id)
     {
