@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Service\ProductService;
+use App\Http\Resources\ProductResource;
 
 class ProductController extends Controller
 {
@@ -27,7 +28,12 @@ class ProductController extends Controller
 
         $products = $this->productService->search($keyword, $minPrice, $maxPrice);
 
-        return response()->json($products);
+        // 如果沒有找到產品
+        if ($products->isEmpty()) {
+            return response()->json(['message' => 'Product Not Found'], 404);
+        }
+
+        return ProductResource::collection($products);
     }
 
     /**
