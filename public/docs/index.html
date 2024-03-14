@@ -100,7 +100,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: March 12, 2024</li>
+        <li>Last updated: March 14, 2024</li>
     </ul>
 </div>
 
@@ -296,20 +296,15 @@ fetch(url, {
 
 <span id="example-responses-GETapi-products">
             <blockquote>
-            <p>Example response (200):</p>
+            <p>Example response (200, success):</p>
         </blockquote>
-                <details class="annotation">
-            <summary style="cursor: pointer;">
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-x-ratelimit-limit: 60
-x-ratelimit-remaining: 59
-access-control-allow-origin: *
- </code></pre></details>         <pre>
+                <pre>
 
-<code class="language-json" style="max-height: 300px;">[]</code>
+<code class="language-json" style="max-height: 300px;">{
+    &quot;id&quot;: 1,
+    &quot;name&quot;: &quot;Apple&quot;,
+    &quot;price&quot;: 100
+}</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-products" hidden>
@@ -434,8 +429,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"name\": \"veritatis\",
-    \"price\": 19
+    \"name\": \"quia\",
+    \"price\": 14
 }"
 </code></pre></div>
 
@@ -451,8 +446,8 @@ const headers = {
 };
 
 let body = {
-    "name": "veritatis",
-    "price": 19
+    "name": "quia",
+    "price": 14
 };
 
 fetch(url, {
@@ -541,10 +536,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="POSTapi-products"
-               value="veritatis"
+               value="quia"
                data-component="body">
     <br>
-<p>限制100字元 Example: <code>veritatis</code></p>
+<p>限制100字元 Example: <code>quia</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>price</code></b>&nbsp;&nbsp;
@@ -552,10 +547,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="price"                data-endpoint="POSTapi-products"
-               value="19"
+               value="14"
                data-component="body">
     <br>
-<p>限制1以上 Example: <code>19</code></p>
+<p>限制1以上 Example: <code>14</code></p>
         </div>
         </form>
 
@@ -572,14 +567,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/products/1" \
+    --get "http://localhost/api/products/molestiae" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/products/1"
+    "http://localhost/api/products/molestiae"
 );
 
 const headers = {
@@ -605,7 +600,7 @@ fetch(url, {
             <pre><code class="language-http">content-type: text/html; charset=UTF-8
 cache-control: no-cache, private
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 58
+x-ratelimit-remaining: 59
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -684,14 +679,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
                         <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
+<small>string</small>&nbsp;
  &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="GETapi-products--id-"
-               value="1"
+                <input type="text" style="display: none"
+                              name="id"                data-endpoint="GETapi-products--id-"
+               value="molestiae"
                data-component="url">
     <br>
-<p>The ID of the product. Example: <code>1</code></p>
+<p>The ID of the product. Example: <code>molestiae</code></p>
             </div>
                     </form>
 
@@ -712,8 +707,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"name\": \"nihil\",
-    \"price\": 20
+    \"name\": \"velit\",
+    \"price\": 11
 }"
 </code></pre></div>
 
@@ -729,8 +724,8 @@ const headers = {
 };
 
 let body = {
-    "name": "nihil",
-    "price": 20
+    "name": "velit",
+    "price": 11
 };
 
 fetch(url, {
@@ -835,10 +830,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="PUTapi-products--id-"
-               value="nihil"
+               value="velit"
                data-component="body">
     <br>
-<p>限制100字元 Example: <code>nihil</code></p>
+<p>限制100字元 Example: <code>velit</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>price</code></b>&nbsp;&nbsp;
@@ -846,10 +841,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="price"                data-endpoint="PUTapi-products--id-"
-               value="20"
+               value="11"
                data-component="body">
     <br>
-<p>限制1以上 Example: <code>20</code></p>
+<p>限制1以上 Example: <code>11</code></p>
         </div>
         </form>
 

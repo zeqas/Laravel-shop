@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Laravel",
-        "_postman_id": "a78ca8c8-7d98-43de-be2a-b715e4fb641c",
+        "_postman_id": "7cecbfdb-8d28-4264-a1a5-8b8845ef09b8",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -98,31 +98,10 @@
                     },
                     "response": [
                         {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "application\/json"
-                                },
-                                {
-                                    "key": "x-ratelimit-limit",
-                                    "value": "60"
-                                },
-                                {
-                                    "key": "x-ratelimit-remaining",
-                                    "value": "59"
-                                },
-                                {
-                                    "key": "access-control-allow-origin",
-                                    "value": "*"
-                                }
-                            ],
+                            "header": [],
                             "code": 200,
-                            "body": "[]",
-                            "name": ""
+                            "body": "{\n  \"id\": 1,\n  \"name\": \"Apple\",\n  \"price\": 100\n}",
+                            "name": "success"
                         }
                     ]
                 },
@@ -148,7 +127,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"veritatis\",\"price\":19}"
+                            "raw": "{\"name\":\"quia\",\"price\":14}"
                         },
                         "description": "",
                         "auth": {
@@ -169,7 +148,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "1",
+                                    "value": "molestiae",
                                     "description": "The ID of the product."
                                 }
                             ]
@@ -208,7 +187,7 @@
                                 },
                                 {
                                     "key": "x-ratelimit-remaining",
-                                    "value": "58"
+                                    "value": "59"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
@@ -251,7 +230,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"nihil\",\"price\":20}"
+                            "raw": "{\"name\":\"velit\",\"price\":11}"
                         },
                         "description": "",
                         "auth": {

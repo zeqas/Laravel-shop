@@ -37,14 +37,25 @@ paths:
       parameters: []
       responses:
         200:
-          description: ''
+          description: success
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                example: []
+                type: object
+                example:
+                  id: 1
+                  name: Apple
+                  price: 100
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Apple
+                  price:
+                    type: integer
+                    example: 100
       tags:
         - Endpoints
       requestBody:
@@ -85,11 +96,11 @@ paths:
                 name:
                   type: string
                   description: 限制100字元
-                  example: veritatis
+                  example: quia
                 price:
                   type: integer
                   description: 限制1以上
-                  example: 19
+                  example: 14
       security: []
   '/api/products/{id}':
     get:
@@ -126,11 +137,11 @@ paths:
                 name:
                   type: string
                   description: 限制100字元
-                  example: nihil
+                  example: velit
                 price:
                   type: integer
                   description: 限制1以上
-                  example: 20
+                  example: 11
       security: []
     delete:
       summary: 刪除產品
@@ -146,10 +157,10 @@ paths:
         in: path
         name: id
         description: 'The ID of the product.'
-        example: 1
+        example: molestiae
         required: true
         schema:
-          type: integer
+          type: string
 tags:
   -
     name: Endpoints

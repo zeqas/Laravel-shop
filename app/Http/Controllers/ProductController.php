@@ -19,6 +19,12 @@ class ProductController extends Controller
      * @bodyParam name string 產品名稱. Example: Apple
      * @bodyParam minPrice float 最低價格. Example: 1
      * @bodyParam maxPrice float 最高價格. Example: 1000
+     *
+     * @response scenario=success status=200 {
+     *   "id": 1,
+     *   "name": "Apple",
+     *   "price": 100
+     * }
      */
     public function index(Request $request)
     {
@@ -30,7 +36,7 @@ class ProductController extends Controller
 
         // 如果沒有找到產品
         if ($products->isEmpty()) {
-            return response()->json(['message' => 'Product Not Found'], 404);
+            return response()->json(['message' => 'Product Not Found'], 200);
         }
 
         return ProductResource::collection($products);
