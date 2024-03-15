@@ -1,6 +1,7 @@
 version: "3.7"
 services:
     app:
+        container_name: laravel-shop
         build: .
         image: php:8.3-fpm
         volumes:
@@ -10,9 +11,12 @@ services:
         ports:
             - "8000:8000"
     db:
-        image: mysql:8.0
+        image: mysql:5.7
         platform: linux/amd64
         environment:
+            MYSQL_DATABASE: docker
+            MYSQL_USER: root
+            MYSQL_PASSWORD: 1Qaz2Wsx
             MYSQL_ROOT_PASSWORD: 1Qaz2Wsx
         ports:
             - "3306:3306"

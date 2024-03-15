@@ -2,6 +2,8 @@ FROM php:8.3-fpm
 
 # 安裝依賴
 RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    libonig-dev \
     build-essential \
     libpng-dev \
     libjpeg62-turbo-dev \
@@ -12,7 +14,8 @@ RUN apt-get update && apt-get install -y \
     vim \
     unzip \
     git \
-    curl
+    curl \
+    default-mysql-client
 
 # 清理快取
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
