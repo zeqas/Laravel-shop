@@ -3,7 +3,6 @@ services:
     app:
         container_name: laravel-shop
         build: .
-        image: php:8.3-fpm
         volumes:
             - ./:/var/www/html
         working_dir: /var/www/html
