@@ -26,7 +26,7 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $ // 處理 AuthenticationException 錯誤
+        // 處理 AuthenticationException 錯誤
         $this->renderable(function (AuthenticationException $e) {
             return response()->json([
                 'success' => false,
