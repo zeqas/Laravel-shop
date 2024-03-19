@@ -55,7 +55,7 @@
             url: '/api/products',
             type: 'GET',
             success: function(data) {
-                data.forEach(function(product) {
+                data.data.forEach(function(product) {
                     var row = $('<tr>');
                     row.append($('<td>').html(`
                     <span class="name">${product.name}</span>

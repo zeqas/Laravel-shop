@@ -19,3 +19,5 @@ yarn-error.log
 /.vscode
 /storage/debugbar
 **/.DS_Store
+/.scribe
+/public/docs
