@@ -21,3 +21,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Product routes
 Route::apiResource('products', ProductController::class);
+
+
+// User routes
+Route::post('/register', [UserController::class, 'register']);
+Route::post('/login', [UserController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/me', [UserController::class, 'me']);
+});
