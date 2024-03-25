@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    /**
+     * 註冊
+     * @bodyParam name string required 名稱 Example: tester
+     * @bodyParam email string required 信箱 Example: tester@mail.com
+     * @bodyParam password string required 密碼 Example: hashedPassword
+     *
+     * @response scenario=success status=200 {
+     *   "id": 1
+     * }
+     */
     public function register(Request $request)
     {
         $name = $request->input('name');
@@ -27,6 +37,20 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * 登入
+     * @bodyParam email string required 信箱 Example: tester@mail.com
+     * @bodyParam password string required 密碼 Example: hashedPassword
+     *
+     * @response scenario=success status=200 {
+     *   "id": 1,
+     *   "token": "YOUR_TOKEN"
+     * }
+     *
+     * @response scenario=error status=401 {
+     *   "message": "Invalid credentials"
+     * }
+     */
     public function login(Request $request)
     {
         $email = $request->input('email');
@@ -51,6 +75,19 @@ class UserController extends Controller
         ], 401);
     }
 
+
+    /**
+     * 取得目前使用者資訊
+     * @response scenario=success status=200 {
+     *   "id": 1,
+     *   "email": "tester@mail.com"
+     * }
+     *
+     * @response scenario=error status=401 {
+     *   "success": "false"
+     *   "message": "無效Token"
+     * }
+     */
     public function me(Request $request)
     {
         $user = auth('sanctum')->user();

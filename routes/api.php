@@ -16,23 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 // User routes
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/me', [UserController::class, 'me']);
-});
 
 // Product routes
 Route::get('products', [ProductController::class, 'index']);
 
 // 登入後才能新增、修改、刪除
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/me', [UserController::class, 'me']);
+
     Route::post('products', [ProductController::class, 'store']);
     Route::put('products/{product}', [ProductController::class, 'update']);
     Route::delete('products/{product}', [ProductController::class, 'destroy']);
