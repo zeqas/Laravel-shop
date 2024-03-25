@@ -20,4 +20,5 @@ yarn-error.log
 /storage/debugbar
 **/.DS_Store
 /.scribe
-/public/docs
+./public/docs
+resources/views/scribe/

@@ -8,15 +8,54 @@
 -   Composer
 -   MySQL
 -   Nginx
+-   Docker
+-   Docker Compose
 
 ## 安裝步驟
 
 ```bash
-git clone https://github.com/zeqas/Laravel-shop.git  && cd /Laravel-shop #1 複製到本機
-composer install #2 安裝套件
-php artisan serve #3 啟動伺服器
-php artisan migrate #4 資料庫遷移
+git clone https://github.com/zeqas/Laravel-shop.git  && cd /Laravel-shop # 複製到本機
+cp .env.example .env # 建立 .env 檔
 ```
+
+設定資料庫相關參數
+
+```env
+    DB_CONNECTION=mysql
+    DB_HOST=db
+    DB_PORT=3306
+    DB_DATABASE=docker
+    DB_USERNAME=root
+    DB_PASSWORD=1Qaz2Wsx
+```
+
+### 使用 docker-compose 建立環境
+
+使用前請確認 ports 的號碼是否已經被使用
+
+```bash
+docker-compose up --build -d # 建立容器
+docker exec -it app bash # 進入 app 容器
+```
+
+```bash
+php artisan key:generate # 生成 APP_KEY
+php artisan migrate # 資料庫遷移
+```
+
+## 基本使用
+
+目前有基礎首頁
+但是在未登入的情況下，只能瀏覽，嘗試新增商品時會回應 401 Unauthorized 錯誤
+
+建議透過 Postman 使用相關 API
+除了 Controller 的註解之外，可以使用 scribe 生成文件
+
+```bash
+php artisan scribe:generate # 透過 scribe 生成文件
+```
+
+到 [URL]/docs （例如：http://0.0.0.0:8000/docs）查看相關文件
 
 ## 已完成功能
 
@@ -26,10 +65,11 @@ php artisan migrate #4 資料庫遷移
 -   編輯產品：修改現有產品的名稱和價格。
 -   刪除產品：從系統中移除產品。
 
+-   用戶註冊與登錄
+
 ## 待完成功能
 
 -   購物車功能
--   用戶註冊與登錄
 -   簡易結算流程
 -   管理員後台（產品管理、訂單管理）
 
