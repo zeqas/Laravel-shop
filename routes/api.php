@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "api" middleware group. Make something great!
 |
-*/
+ */
 
 // User routes
 Route::post('/register', [UserController::class, 'register']);
@@ -27,7 +27,9 @@ Route::get('products', [ProductController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [UserController::class, 'me']);
 
-    Route::post('products', [ProductController::class, 'store']);
-    Route::put('products/{product}', [ProductController::class, 'update']);
-    Route::delete('products/{product}', [ProductController::class, 'destroy']);
+    Route::middleware(['role.check:admin'])->group(function () {
+        Route::post('products', [ProductController::class, 'store']);
+        Route::put('products/{product}', [ProductController::class, 'update']);
+        Route::delete('products/{product}', [ProductController::class, 'destroy']);
+    });
 });
