@@ -8,6 +8,13 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @group User management
+ *
+ * 使用者管理，包括註冊、登入、取得使用者資訊
+ *
+ */
+
 class UserController extends Controller
 {
     /**

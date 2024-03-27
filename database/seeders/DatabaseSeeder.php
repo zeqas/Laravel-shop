@@ -10,7 +10,9 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
+     * 產生使用者與產品的假資料（各十筆）
+     * @responseFile /database/seeders/UserSeeder.php
+     * @responseFile /database/seeders/ProductSeeder.php
      */
     public function run(): void
     {

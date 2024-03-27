@@ -14,7 +14,7 @@
 ## 安裝步驟
 
 ```bash
-git clone https://github.com/zeqas/Laravel-shop.git  && cd /Laravel-shop # 複製到本機
+git clone https://github.com/zeqas/Laravel-shop.git  && cd ./Laravel-shop # 複製到本機
 cp .env.example .env # 建立 .env 檔
 ```
 
@@ -56,6 +56,14 @@ php artisan scribe:generate # 透過 scribe 生成文件
 ```
 
 到 [URL]/docs （例如：http://0.0.0.0:8000/docs）查看相關文件
+
+### 種子資料
+
+可以先執行種子資料，生成各 10 筆的產品與使用者
+
+```bash
+php artisan db:seed
+```
 
 ## 已完成功能
 

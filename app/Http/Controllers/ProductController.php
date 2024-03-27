@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 use App\Service\ProductService;
 use App\Http\Resources\ProductResource;
 
+
+/**
+ * @group Product management
+ *
+ * 產品管理，包括新增、查詢、更新、刪除
+ */
 class ProductController extends Controller
 {
     public function __construct(ProductService $productService)
@@ -86,6 +92,7 @@ class ProductController extends Controller
 
     /**
      * 刪除產品
+     * @bodyParam id integer required 產品ID. Example: 1
      */
     public function destroy(string $id)
     {
