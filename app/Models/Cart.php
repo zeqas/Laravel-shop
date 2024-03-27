@@ -24,9 +24,14 @@ class Cart extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function cartProducts()
+    public function products()
     {
-        return $this->belongsToMany(Product::class, 'cart_products')
+        // FIXME: 應該使用哪個寫法？差異在哪？
+        // return $this->belongsToMany(Product::class, 'cart_products')
+        // ->withPivot('quantity')
+        // ->withTimestamps();
+
+        return $this->belongsToMany(Product::class)
             ->withPivot('quantity')
             ->withTimestamps();
     }
