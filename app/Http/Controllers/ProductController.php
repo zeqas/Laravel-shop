@@ -25,6 +25,7 @@ class ProductController extends Controller
      * @bodyParam name string 產品名稱. Example: Apple
      * @bodyParam minPrice float 最低價格. Example: 1
      * @bodyParam maxPrice float 最高價格. Example: 1000
+     * @bodyParam stock integer 最低庫存數量. Example: 1
      *
      * @response scenario=success status=200 {
      *   "id": 1,
@@ -37,8 +38,9 @@ class ProductController extends Controller
         $keyword = $request->input('name');
         $minPrice = $request->input('minPrice');
         $maxPrice = $request->input('maxPrice');
+        $stock = $request->input('stock');
 
-        $products = $this->productService->search($keyword, $minPrice, $maxPrice);
+        $products = $this->productService->search($keyword, $minPrice, $maxPrice, $stock);
 
         // 如果沒有找到產品
         if ($products->isEmpty()) {
@@ -52,12 +54,14 @@ class ProductController extends Controller
      * 新增產品
      * @bodyParam name string 限制100字元
      * @bodyParam price integer 限制1以上
+     * @bodyParam stock integer 限制0以上
      */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:100',
             'price' => 'required|integer|min:1',
+            'stock' => 'integer|min:0',
         ]);
 
         $product = Product::create($validatedData);
@@ -77,12 +81,14 @@ class ProductController extends Controller
      * 更新產品資訊
      * @bodyParam name string 限制100字元
      * @bodyParam price integer 限制1以上
+     * @bodyParam stock integer 限制0以上
      */
     public function update(Request $request, Product $product)
     {
         $validatedData = $request->validate([
             'name' => 'string|max:100',
             'price' => 'integer|min:1',
+            'stock' => 'integer|min:0',
         ]);
 
         $product->update($validatedData);

@@ -12,9 +12,10 @@ class ProductService
      * @param string $keyword 關鍵字 Example: Apple
      * @param float $minPrice 最低價格 Example: 1
      * @param float $maxPrice 最高價格 Example: 1000
+     * @param int $stock 最低庫存數量 Example: 1
      * @return array 符合搜尋結果的產品
      */
-    public function search(?string $keyword, ?float $minPrice, ?float $maxPrice)
+    public function search(?string $keyword, ?float $minPrice, ?float $maxPrice, ?int $stock = 1)
     {
         $query = Product::query();
 
@@ -28,6 +29,10 @@ class ProductService
 
         if ($maxPrice) {
             $query->where('price', '<=', $maxPrice);
+        }
+
+        if ($stock) {
+            $query->where('stock', '>=', $stock);
         }
 
         $matchingProducts = $query->get();
