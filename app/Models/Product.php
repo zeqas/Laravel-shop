@@ -19,4 +19,9 @@ class Product extends Model
         'price' => 'integer',
         'stock' => 'integer',
     ];
+
+    public function carts()
+    {
+        return $this->belongsToMany(Cart::class);
+    }
 }
