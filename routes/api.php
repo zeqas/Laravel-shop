@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // TODO: 使用者只能進入自己的購物車
     Route::get('cart/{cart}', [CartController::class, 'show']);
-    Route::put('cart/{cart}/update', [CartController::class, 'update']);
-    Route::delete('cart/{cartProduct}/delete', [CartController::class, 'destroy']);
+    Route::put('cart/{cart}/update/{cartProduct}', [CartController::class, 'update']);
+    Route::delete('cart/{cart}/delete/{product}', [CartController::class, 'destroy']);
     Route::post('cart/{cart}/checkout', [CartController::class, 'checkout']);
 });
