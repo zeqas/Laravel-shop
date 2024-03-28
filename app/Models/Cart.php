@@ -10,13 +10,11 @@ class Cart extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'cart_product'
+        'user_id'
     ];
 
     protected $casts = [
-        'user_id' => 'integer',
-        'cart_product' => 'integer',
+        'user_id' => 'integer'
     ];
 
     public function user()
@@ -26,13 +24,6 @@ class Cart extends Model
 
     public function products()
     {
-        // FIXME: 應該使用哪個寫法？差異在哪？
-        // return $this->belongsToMany(Product::class, 'cart_products')
-        // ->withPivot('quantity')
-        // ->withTimestamps();
-
-        return $this->belongsToMany(Product::class)
-            ->withPivot('quantity')
-            ->withTimestamps();
+        return $this->hasMany(CartProduct::class);
     }
 }

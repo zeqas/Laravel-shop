@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->integer('cart_product')->nullable();
             $table->timestamps();
 
             // 當 user 被刪除時，一併刪除該 user 的購物車
