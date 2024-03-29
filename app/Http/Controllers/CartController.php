@@ -133,6 +133,27 @@ class CartController extends Controller
     }
 
     /**
+     * 清空購物車
+     * @bodyParam id integer required 購物車ID. Example: 1
+     */
+    public function clear(int $cartId)
+    {
+        $authenticated = $this->cartService->checkCartOwner($cartId);
+
+        if (!$authenticated) {
+            return response()->json([
+                'message' => '無權限操作此購物車',
+            ], 403);
+        }
+
+        CartProduct::query()
+            ->where('cart_id', $cartId)
+            ->delete();
+
+        return response(null, 204);
+    }
+
+    /**
      * 購物車結帳
      *
      */
