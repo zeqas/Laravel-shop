@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->integer('stock')->default(0)->after('price')->comment('產品庫存數量');
+            $table->integer('stock')->default(0)->after('price')->comment('商品庫存數量');
         });
     }
 

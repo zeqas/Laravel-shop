@@ -20,8 +20,8 @@ class CartController extends Controller
     }
 
     /**
-     * 新增產品到購物車
-     * @bodyParam product_id integer required 產品ID. Example: 1
+     * 新增商品到購物車
+     * @bodyParam product_id integer required 商品ID. Example: 1
      * @bodyParam quantity integer required 限制0以上. Example: 1
      *
      * @response scenario=success status=201 {
@@ -55,7 +55,7 @@ class CartController extends Controller
             'user_id' => $userId,
         ]);
 
-        // 建立被放入的產品 cartProduct
+        // 建立被放入的商品 cartProduct
         // 如果 cartProduct 已經存在，則更新數量
         $cartProductQuery = CartProduct::query()
             ->where('cart_id', $cart->id)
@@ -77,7 +77,7 @@ class CartController extends Controller
             ]);
         }
 
-        // 回傳 cartProduct，即這次被放入的產品
+        // 回傳 cartProduct，即這次被放入的商品
         return response()->json($cartProduct, 201);
     }
 
@@ -102,7 +102,7 @@ class CartController extends Controller
     }
 
     /**
-     * 更新產品數量
+     * 更新商品數量
      * @bodyParam quantity integer 限制0以上
      */
     public function update(Request $request, $cartProductId)
@@ -119,8 +119,8 @@ class CartController extends Controller
     }
 
     /**
-     * 刪除購物車中的特定產品
-     * @bodyParam id integer required 產品ID. Example: 1
+     * 刪除購物車中的特定商品
+     * @bodyParam id integer required 商品ID. Example: 1
      */
     public function destroy(int $cartId, int $productId)
     {

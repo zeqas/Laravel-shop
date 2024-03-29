@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">產品列表</div>
+                    <div class="card-header">商品列表</div>
 
                     <div class="card-body">
 

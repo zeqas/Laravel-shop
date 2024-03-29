@@ -11,7 +11,7 @@ use App\Http\Resources\ProductResource;
 /**
  * @group Product management
  *
- * 產品管理，包括新增、查詢、更新、刪除
+ * 商品管理，包括新增、查詢、更新、刪除
  */
 class ProductController extends Controller
 {
@@ -21,8 +21,8 @@ class ProductController extends Controller
     }
 
     /**
-     * 產品列表 包括搜尋功能
-     * @bodyParam name string 產品名稱. Example: Apple
+     * 商品列表 包括搜尋功能
+     * @bodyParam name string 商品名稱. Example: Apple
      * @bodyParam minPrice float 最低價格. Example: 1
      * @bodyParam maxPrice float 最高價格. Example: 1000
      * @bodyParam stock integer 最低庫存數量. Example: 1
@@ -42,7 +42,7 @@ class ProductController extends Controller
 
         $products = $this->productService->search($keyword, $minPrice, $maxPrice, $stock);
 
-        // 如果沒有找到產品
+        // 如果沒有找到商品
         if ($products->isEmpty()) {
             return response()->json(['message' => 'Product Not Found'], 200);
         }
@@ -51,7 +51,7 @@ class ProductController extends Controller
     }
 
     /**
-     * 新增產品
+     * 新增商品
      * @bodyParam name string 限制100字元
      * @bodyParam price integer 限制1以上
      * @bodyParam stock integer 限制0以上
@@ -70,7 +70,7 @@ class ProductController extends Controller
     }
 
     /**
-     * 產品詳細資訊
+     * 商品詳細資訊
      */
     public function show(string $id)
     {
@@ -78,7 +78,7 @@ class ProductController extends Controller
     }
 
     /**
-     * 更新產品資訊
+     * 更新商品資訊
      * @bodyParam name string 限制100字元
      * @bodyParam price integer 限制1以上
      * @bodyParam stock integer 限制0以上
@@ -97,8 +97,8 @@ class ProductController extends Controller
     }
 
     /**
-     * 刪除產品
-     * @bodyParam id integer required 產品ID. Example: 1
+     * 刪除商品
+     * @bodyParam id integer required 商品ID. Example: 1
      */
     public function destroy(string $id)
     {
