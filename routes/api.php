@@ -28,16 +28,21 @@ Route::get('products', [ProductController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [UserController::class, 'me']);
 
-    Route::post('products', [ProductController::class, 'store']);
-    Route::put('products/{product}', [ProductController::class, 'update']);
-    Route::delete('products/{product}', [ProductController::class, 'destroy']);
+    Route::middleware(['role.check:admin'])->group(function () {
+        Route::post('products', [ProductController::class, 'store']);
+        Route::put('products/{product}', [ProductController::class, 'update']);
+        Route::delete('products/{product}', [ProductController::class, 'destroy']);
+    });
 
     // 將商品放入購物車
-    Route::post('cart', [CartController::class, 'store']);
+    Route::middleware(['role.check:customer'])->group(function () {
+        // TODO: 使用者只能進入自己的購物車
+        Route::get('cart/{cart}', [CartController::class, 'show']);
+        // 新增商品到購物車
+        Route::post('cart', [CartController::class, 'store']);
 
-    // TODO: 使用者只能進入自己的購物車
-    Route::get('cart/{cart}', [CartController::class, 'show']);
-    Route::put('cart/{cart}/update/{cartProduct}', [CartController::class, 'update']);
-    Route::delete('cart/{cart}/delete/{product}', [CartController::class, 'destroy']);
-    Route::post('cart/{cart}/checkout', [CartController::class, 'checkout']);
+        Route::put('cart/{cartProduct}', [CartController::class, 'update']);
+        Route::delete('cart/{product}', [CartController::class, 'destroy']);
+        Route::post('cart/{cart}/checkout', [CartController::class, 'checkout']);
+    });
 });
