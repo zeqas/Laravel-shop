@@ -37,13 +37,13 @@ Route::middleware('auth:sanctum')->group(function () {
     // 將商品放入購物車
     Route::middleware(['role.check:customer'])->group(function () {
         // TODO: 使用者只能進入自己的購物車
-        Route::get('cart/{cart}', [CartController::class, 'show']);
+        Route::get('cart', [CartController::class, 'show']);
         // 新增商品到購物車
         Route::post('cart', [CartController::class, 'store']);
 
         Route::put('cart/{cartProduct}', [CartController::class, 'update']);
         Route::delete('cart/{product}', [CartController::class, 'destroy']);
-        Route::delete('cart/{cart}', [CartController::class, 'clear']);
+        Route::delete('cart/clear', [CartController::class, 'clear']);
         Route::post('cart/{cart}/checkout', [CartController::class, 'checkout']);
     });
 });
