@@ -22,23 +22,19 @@ class CartController extends Controller
 
     /**
      * 新增商品到購物車
+     * 回傳被新增的商品 id 和數量
      * @bodyParam product_id integer required 商品ID. Example: 1
      * @bodyParam quantity integer required 限制0以上. Example: 1
      *
      * @response scenario=success status=201 {
-     *  "id": 1,
-     *  "user_id": 1,
-     *  "cart_product": {
-     *   {
-     *   "id": 1,
-     *   "product_id": 1,
-     *   "quantity": 1
-     *   },
-     *   {
-     *    "id": 2,
-     *    "product_id": 2,
-     *    "quantity": 2
-     *   }
+     *    "product_id": 1,
+     *    "quantity": 1,
+     *    "product": {
+     *        "id": "1",
+     *        "price": "100",
+     *        "name": "Apple",
+     *        "stock": 10
+     *    }
      * }
      */
     public function store(Request $request)
@@ -59,6 +55,7 @@ class CartController extends Controller
         // 如果 cartProduct 已經存在，則更新數量
         $cartProductQuery = CartProduct::query()
             ->where('cart_id', $cart->id)
+            ->with('product')
             ->where('product_id', $validatedData['product_id']);
 
         $isCartProductExist = $cartProductQuery->exists();
@@ -87,15 +84,26 @@ class CartController extends Controller
      *   "cartProducts": [
      *       {
      *           "product_id": 1,
+     *           "quantity": 1,
+     *           "product": {
+     *               "id": "1",
+     *               "price": "100",
+     *               "name": "Apple",
+     *               "stock": 10
+     *           }
+     *       },
+     *       {
+     *           "product_id": 2,
      *           "quantity": 2,
      *           "product": {
-     *               "name": "Apple",
-     *               "price": 100,
-     *               "stock": 1
+     *               "id": 2,
+     *               "price": "200",
+     *               "name": "Banana",
+     *               "stock": 10
      *           }
      *       }
      *   ],
-     *   "total": 200
+     *   "total": 300
      * }
      */
     public function show(Request $request)
@@ -173,7 +181,9 @@ class CartController extends Controller
 
     /**
      * 購物車結帳
-     *
+     * @response scenario=success status=201 {
+     *  "message": "結帳成功，總共 $300 元"
+     * }
      */
     public function checkout(Request $request)
     {
