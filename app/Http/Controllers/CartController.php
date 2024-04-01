@@ -6,6 +6,7 @@ use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\CartProduct;
 use App\Service\CartService;
+use App\Http\Resources\CartResource;
 
 /**
  * @group 購物車 management
@@ -50,7 +51,6 @@ class CartController extends Controller
         $userId = auth()->user()->id;
 
         // 建立一個購物車
-        // TODO: updateOrCreate? findOrCreate?
         $cart = Cart::firstOrCreate([
             'user_id' => $userId,
         ]);
@@ -78,25 +78,43 @@ class CartController extends Controller
         }
 
         // 回傳 cartProduct，即這次被放入的商品
-        return response()->json($cartProduct, 201);
+        return response()->json(new CartResource($cartProduct), 201);
     }
 
     /**
      * 購物車 列表
+     * @response scenario=success status=201 {
+     *   "cartProducts": [
+     *       {
+     *           "product_id": 1,
+     *           "quantity": 2,
+     *           "product": {
+     *               "name": "Apple",
+     *               "price": 100,
+     *               "stock": 1
+     *           }
+     *       }
+     *   ],
+     *   "total": 200
+     * }
      */
     public function show(Request $request)
     {
         $userId = auth()->user()->id;
 
+        // 取得使用者的購物車(目前每個使用者只有一個購物車)
+        $cartId = Cart::query()->where('user_id', $userId)->value('id');
         // 顯示 Cart 裏所有 CartProduct 的資料
-        $cartProducts = CartProduct::query()->where('cart_id', $userId)->get();
+        $cartProducts = CartProduct::query()->where('cart_id', $cartId)->get();
+        // 商品總價
         $total = 0;
+
         foreach ($cartProducts as $cartProduct) {
             $total += $this->cartService->calculatePrice($cartProduct);
         }
 
         return response()->json([
-            'cartProducts' => $cartProducts,
+            'cartProducts' => CartResource::collection($cartProducts),
             'total' => $total,
         ], 201);
     }
