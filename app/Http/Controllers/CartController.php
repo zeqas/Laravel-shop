@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\CartProduct;
 use App\Service\CartService;
 use App\Http\Resources\CartResource;
+use App\Models\Order;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @group 購物車 management
@@ -187,11 +189,12 @@ class CartController extends Controller
      */
     public function checkout(Request $request)
     {
-        //TODO: ACID transaction
+        DB::beginTransaction();
         $userId = auth()->user()->id;
 
         //檢查庫存是否足夠
-        $cartProducts = CartProduct::query()->where('cart_id', $userId)->get();
+        $cartId = Cart::query()->where('user_id', $userId)->value('id');
+        $cartProducts = CartProduct::query()->where('cart_id', $cartId)->get();
         $total = 0;
 
         foreach ($cartProducts as $cartProduct) {
@@ -204,10 +207,26 @@ class CartController extends Controller
 
             $product->stock -= $cartProduct->quantity;
             $total += $this->cartService->calculatePrice($cartProduct);
+
+            $product->save();
         }
 
+        // 建立訂單 Order，將購物車內容轉換成訂單內容
+        Order::create([
+            'user_id' => $userId,
+            'product_data' => CartResource::collection($cartProducts),
+            'total' => $total,
+        ]);
+
+        // 刪除購物車內容
+        foreach ($cartProducts as $cartProduct) {
+            $cartProduct->delete();
+        }
+
+        DB::commit();
+
         return response()->json([
-            'message' => '結帳成功，總共 $' . $total . ' 元',
+            'message' => '結帳成功，總共 $' . $total . ' 元，訂單建立成功',
         ], 201);
     }
 }
