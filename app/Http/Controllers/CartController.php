@@ -9,6 +9,7 @@ use App\Service\CartService;
 use App\Http\Resources\CartResource;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
+use function PHPUnit\Framework\isEmpty;
 
 /**
  * @group 購物車 management
@@ -17,6 +18,12 @@ use Illuminate\Support\Facades\DB;
  */
 class CartController extends Controller
 {
+    /**
+     * @var CartService
+     */
+
+    private $cartService;
+
     public function __construct(CartService $cartService)
     {
         $this->cartService = $cartService;
@@ -148,12 +155,11 @@ class CartController extends Controller
 
     /**
      * 刪除購物車中的特定商品
-     * @bodyParam id integer required 商品ID. Example: 1
+     * @bodyParam productId integer required 商品ID. Example: 1
      */
-    public function destroy(int $cartId, int $productId)
+    public function destroy(int $productId)
     {
         CartProduct::query()
-            ->where('cart_id', $cartId)
             ->where('product_id', $productId)
             ->delete();
 
@@ -162,17 +168,11 @@ class CartController extends Controller
 
     /**
      * 清空購物車
-     * @bodyParam id integer required 購物車ID. Example: 1
      */
-    public function clear(int $cartId)
+    public function clear()
     {
-        $authenticated = $this->cartService->checkCartOwner($cartId);
-
-        if (!$authenticated) {
-            return response()->json([
-                'message' => '無權限操作此購物車',
-            ], 403);
-        }
+        $userId = auth()->user()->id;
+        $cartId = Cart::query()->where('user_id', $userId)->value('id');
 
         CartProduct::query()
             ->where('cart_id', $cartId)
@@ -196,6 +196,13 @@ class CartController extends Controller
         $cartId = Cart::query()->where('user_id', $userId)->value('id');
         $cartProducts = CartProduct::query()->where('cart_id', $cartId)->get();
         $total = 0;
+
+        // 檢查購物車是否為空
+        if (isEmpty($cartProducts)) {
+            return response()->json([
+                'message' => '購物車是空的，請先加入商品',
+            ], 400);
+        }
 
         foreach ($cartProducts as $cartProduct) {
             $product = $cartProduct->product;
