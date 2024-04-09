@@ -13,7 +13,10 @@ class CartControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    // 結帳 成功
+    /**
+     *  @covers App\Http\Controllers\CartController::checkout
+     *  結帳 成功
+     */
     public function test_checkout_success()
     {
         $user = User::factory()->create(['role' => 'customer']);
@@ -30,14 +33,15 @@ class CartControllerTest extends TestCase
 
         $response = $this->actingAs($user)->postJson('api/cart/checkout');
 
-        $response->dump();
-
         $response->assertStatus(201);
         $response->assertJson(['message' => "結帳成功，總共 $$expectedTotal 元，訂單建立成功"]);
         $this->assertDatabaseHas('products', ['id' => $product->id, 'stock' => 5]);
     }
 
-    // 結帳 庫存不足
+    /**
+     *  @covers App\Http\Controllers\CartController::checkout
+     *  庫存不足
+     */
     public function test_checkout_insufficient_stock()
     {
         $user = User::factory()->create(['role' => 'customer']);
@@ -51,8 +55,6 @@ class CartControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->postJson('api/cart/checkout');
-
-        $response->dump();
 
         $response->assertStatus(400);
         $response->assertJson(['message' => '庫存不足']);
