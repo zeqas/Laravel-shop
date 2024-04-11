@@ -192,10 +192,12 @@ class CartController extends Controller
         DB::beginTransaction();
         $userId = auth()->user()->id;
 
-        //檢查庫存是否足夠
-        $cartId = Cart::query()->where('user_id', $userId)->value('id');
+        $cart = Cart::query()->where('user_id', $userId)->first();
+        $cartId = $cart->id;
         $cartProducts = CartProduct::query()->where('cart_id', $cartId)->get();
         $total = 0;
+
+        $cart->load('products');
 
         // 檢查購物車是否為空
         if (isEmpty($cartProducts)) {
@@ -206,6 +208,8 @@ class CartController extends Controller
 
         foreach ($cartProducts as $cartProduct) {
             $product = $cartProduct->product;
+
+            //檢查庫存是否足夠
             if ($product->stock < $cartProduct->quantity) {
                 return response()->json([
                     'message' => '庫存不足',

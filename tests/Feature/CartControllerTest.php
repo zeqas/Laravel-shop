@@ -22,12 +22,15 @@ class CartControllerTest extends TestCase
         $user = User::factory()->create(['role' => 'customer']);
         $product = Product::factory()->create(['stock' => 10]);
         $cart = Cart::create(['user_id' => $user->id]);
+        $cartId = $cart->id;
 
         $cartProduct = CartProduct::create([
-            'cart_id' => $cart->id,
+            'cart_id' => $cartId,
             'product_id' => $product->id,
             'quantity' => 5,
         ]);
+
+        $cart->load('products');
 
         $expectedTotal = $cartProduct->quantity * $product->price;
 
@@ -48,11 +51,13 @@ class CartControllerTest extends TestCase
         $product = Product::factory()->create(['stock' => 4]);
         $cart = Cart::create(['user_id' => $user->id]);
 
-        CartProduct::create([
+        $cartProduct = CartProduct::create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'quantity' => 5,
         ]);
+
+        $cart->load('products');
 
         $response = $this->actingAs($user)->postJson('api/cart/checkout');
 
