@@ -95,20 +95,16 @@ class CartController extends Controller
      *           "product_id": 1,
      *           "quantity": 1,
      *           "product": {
-     *               "id": "1",
      *               "price": "100",
      *               "name": "Apple",
-     *               "stock": 10
      *           }
      *       },
      *       {
      *           "product_id": 2,
      *           "quantity": 2,
      *           "product": {
-     *               "id": 2,
      *               "price": "200",
      *               "name": "Banana",
-     *               "stock": 10
      *           }
      *       }
      *   ],
@@ -200,11 +196,7 @@ class CartController extends Controller
         $cart->load('products');
 
         // 檢查購物車是否為空
-        if (isEmpty($cartProducts)) {
-            return response()->json([
-                'message' => '購物車是空的，請先加入商品',
-            ], 400);
-        }
+        $this->cartService->checkCartProductExist($cartProducts);
 
         foreach ($cartProducts as $cartProduct) {
             $product = $cartProduct->product;
@@ -237,7 +229,7 @@ class CartController extends Controller
         DB::commit();
 
         return response()->json([
-            'message' => '結帳成功，總共 $' . $total . ' 元，訂單建立成功',
+            'message' => '訂單建立成功',
         ], 201);
     }
 }

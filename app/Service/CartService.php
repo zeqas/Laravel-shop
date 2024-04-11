@@ -6,6 +6,8 @@ use App\Exceptions\ForbiddenException;
 use App\Models\Cart;
 use App\Models\CartProduct;
 
+use function PHPUnit\Framework\isEmpty;
+
 class CartService
 {
     // 價錢總計
@@ -27,6 +29,16 @@ class CartService
 
         if ($cartId !== $userCartId) {
             throw new ForbiddenException('無權限操作此購物車', $userCartId, $cartId);
+        }
+    }
+
+    // 檢查購物車是否有商品
+    public function checkCartProductExist($cartProducts)
+    {
+        if (isEmpty($cartProducts)) {
+            return response()->json([
+                'message' => '購物車是空的，請先加入商品',
+            ], 400);
         }
     }
 }

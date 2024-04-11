@@ -14,30 +14,152 @@ class CartControllerTest extends TestCase
     use DatabaseTransactions;
 
     /**
+     *  @covers App\Http\Controllers\CartController::store
+     *  將商品加入購物車 成功
+     */
+    public function test_store_success()
+    {
+        // 創建一個用戶和一個商品
+        $user = User::factory()->create(['role' => 'customer']);
+        $product = Product::factory()->create();
+
+        // 模擬用戶發送一個請求來將商品添加到購物車中
+        $response = $this->actingAs($user)->postJson('api/cart', [
+            'product_id' => $product->id,
+            'quantity' => 1,
+        ]);
+
+        // 檢查狀態碼和內容
+        $response->assertStatus(201);
+        $response->assertJson([
+            'product_id' => $product->id,
+            'quantity' => 1,
+        ]);
+
+        // 檢查購物車和購物車商品的數量
+        $this->assertEquals(1, Cart::where('user_id', $user->id)->count());
+        $this->assertEquals(1, CartProduct::where('cart_id', $user->cart->id)->count());
+    }
+
+    /**
+     *  @covers App\Http\Controllers\CartController::show
+     *  顯示購物車內容
+     */
+    public function test_show_success()
+    {
+        // 創建一個用戶和兩個商品
+        $user = User::factory()->create(['role' => 'customer']);
+        $product1 = Product::factory()->create(['price' => 100]);
+        $product2 = Product::factory()->create(['price' => 200]);
+
+        // 模擬用戶發送兩個請求來將商品添加到購物車中
+        $this->actingAs($user)->postJson('api/cart', [
+            'product_id' => $product1->id,
+            'quantity' => 1,
+        ]);
+        $this->actingAs($user)->postJson('api/cart', [
+            'product_id' => $product2->id,
+            'quantity' => 2,
+        ]);
+
+        // 模擬用戶發送一個請求來查看購物車
+        $response = $this->actingAs($user)->getJson('api/cart');
+
+        // 檢查響應的狀態碼和內容
+        $response->assertStatus(201);
+        $response->assertJson([
+            'cartProducts' => [
+                [
+                    'product_id' => $product1->id,
+                    'quantity' => 1,
+                    'product' => [
+                        'price' => '100',
+                        'name' => $product1->name,
+                    ],
+                ],
+                [
+                    'product_id' => $product2->id,
+                    'quantity' => 2,
+                    'product' => [
+                        'price' => '200',
+                        'name' => $product2->name,
+                    ],
+                ],
+            ],
+            'total' => 500,
+        ]);
+    }
+
+    /**
+     *  @covers App\Http\Controllers\CartController::destroy
+     *  刪除購物車特定商品
+     */
+    public function test_destroy_success()
+    {
+        // 創建一個用戶和兩個產品
+        $user = User::factory()->create(['role' => 'customer']);
+        $product1 = Product::factory()->create();
+        $product2 = Product::factory()->create();
+
+        // 模擬用戶發送兩個請求來將產品添加到購物車中
+        $this->actingAs($user)->postJson('api/cart', [
+            'product_id' => $product1->id,
+            'quantity' => 1,
+        ]);
+        $this->actingAs($user)->postJson('api/cart', [
+            'product_id' => $product2->id,
+            'quantity' => 1,
+        ]);
+
+        // 模擬用戶發送一個請求來刪除一個產品
+        $this->actingAs($user)->deleteJson("api/cart/{$product1->id}");
+
+        // 檢查購物車產品的數量
+        $this->assertEquals(1, CartProduct::where('cart_id', $user->cart->id)->count());
+    }
+
+    /**
+     *  @covers App\Http\Controllers\CartController::clear
+     *  清空購物車所有商品
+     */
+    public function test_clear_success()
+    {
+        // 創建一個用戶和一個產品
+        $user = User::factory()->create(['role' => 'customer']);
+        $product = Product::factory()->create();
+
+        // 模擬用戶發送一個請求來將產品添加到購物車中
+        $this->actingAs($user)->postJson('api/cart', [
+            'product_id' => $product->id,
+            'quantity' => 1,
+        ]);
+
+        // 模擬用戶發送一個請求來清空購物車
+        $this->actingAs($user)->deleteJson('api/cart/clear');
+
+        // 檢查購物車產品的數量
+        $this->assertEquals(0, CartProduct::where('cart_id', $user->cart->id)->count());
+    }
+
+    /**
      *  @covers App\Http\Controllers\CartController::checkout
-     *  結帳 成功
+     *  建立訂單 成功
      */
     public function test_checkout_success()
     {
         $user = User::factory()->create(['role' => 'customer']);
         $product = Product::factory()->create(['stock' => 10]);
-        $cart = Cart::create(['user_id' => $user->id]);
-        $cartId = $cart->id;
 
-        $cartProduct = CartProduct::create([
-            'cart_id' => $cartId,
+        // 將商品加入購物車
+        $this->actingAs($user)->postJson('api/cart', [
             'product_id' => $product->id,
             'quantity' => 5,
         ]);
 
-        $cart->load('products');
-
-        $expectedTotal = $cartProduct->quantity * $product->price;
-
         $response = $this->actingAs($user)->postJson('api/cart/checkout');
 
         $response->assertStatus(201);
-        $response->assertJson(['message' => "結帳成功，總共 $$expectedTotal 元，訂單建立成功"]);
+        $response->assertJson(['message' => "訂單建立成功"]);
         $this->assertDatabaseHas('products', ['id' => $product->id, 'stock' => 5]);
     }
 
@@ -49,15 +171,12 @@ class CartControllerTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'customer']);
         $product = Product::factory()->create(['stock' => 4]);
-        $cart = Cart::create(['user_id' => $user->id]);
 
-        $cartProduct = CartProduct::create([
-            'cart_id' => $cart->id,
+        // 將商品加入購物車
+        $this->actingAs($user)->postJson('api/cart', [
             'product_id' => $product->id,
             'quantity' => 5,
         ]);
-
-        $cart->load('products');
 
         $response = $this->actingAs($user)->postJson('api/cart/checkout');
 
