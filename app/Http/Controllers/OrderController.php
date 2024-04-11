@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
@@ -15,14 +16,11 @@ class OrderController extends Controller
     /**
      * 訂單列表
      * @response scenario=success status=201 {
-     *   "id": 1,
      *   "user_id": 1,
      *   "product_data": [
      *     "product": {
-     *        "id": "1",
      *        "price": "100",
      *        "name": "Apple",
-     *        "stock": 10
      *     },
      *      "quantity": 1,
      *      "product_id": 1
@@ -32,8 +30,6 @@ class OrderController extends Controller
      *    }
      *   ],
      *   "total": 100,
-     *   "created_at": "2024-04-03T10:02:41.000000Z",
-     *   "updated_at": "2024-04-03T10:02:41.000000Z"
      * }
      */
     public function index()
@@ -41,6 +37,9 @@ class OrderController extends Controller
         $userId = auth()->user()->id;
         $orders = Order::query()->where('user_id', $userId)->get();
 
-        return response()->json($orders, 201);
+        // 列出所有訂單
+        return response()->json([
+            "orders" => OrderResource::collection($orders),
+        ], 201);
     }
 }
