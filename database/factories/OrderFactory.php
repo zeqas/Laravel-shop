@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Http\Resources\CartResource;
+use App\Models\Cart;
+use App\Models\CartProduct;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -17,28 +20,20 @@ class OrderFactory extends Factory
         $user = User::factory()->create(['role' => 'customer']);
         $product = Product::factory()->create();
 
-        // 創建一個包含該商品的 product_data json 資料
-        // FIXME 建立符合 Order.product_data 格式的資料
-        $product_data = [
-            [
-                'product_data' => [
-                    'name' => $product->name,
-                    'price' => $product->price,
-                ],
-                'quantity' => $this->faker->numberBetween(1, 3),
-                'product_id' => $product->id,
-            ],
-        ];
+        // 將商品加入購物車
+        $cart = Cart::where('user_id', $user->id)->first();
+        $cartProduct = CartProduct::create([
+            'cart_id' => $cart->id,
+            'product_id' => $product->id,
+            'quantity' => 1,
+        ]);
 
-        // 計算總價
-        $total = array_reduce($product_data, function ($carry, $item) {
-            return $carry + $item['product_data']['price'] * $item['quantity'];
-        }, 0);
+        $productData = new CartResource($cartProduct);
 
         return [
             'user_id' => $user->id,
-            'product_data' => $product_data,
-            'total' => $total,
+            'product_data' => $productData,
+            'total' => $product->price,
         ];
     }
 }
