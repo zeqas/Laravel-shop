@@ -17,7 +17,7 @@ class Order extends Model
 
     protected $casts = [
         'user_id' => 'integer',
-        'product_data' => 'object',
+        'product_data' => 'array',
         'total' => 'integer',
     ];
 

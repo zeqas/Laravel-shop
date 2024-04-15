@@ -42,6 +42,44 @@ class CartControllerTest extends TestCase
     }
 
     /**
+     *  @covers App\Http\Controllers\CartController::update
+     *  將購物車中的商品更新數量 成功
+     */
+    public function test_update_success()
+    {
+        // 創建一個用戶和一個商品
+        $user = User::factory()->create(['role' => 'customer']);
+        $product = Product::factory()->create();
+
+        // 模擬用戶發送一個請求來將商品添加到購物車中
+        $this->actingAs($user)->postJson('api/cart', [
+            'product_id' => $product->id,
+            'quantity' => 1,
+        ]);
+
+        $updatedQuantity = 2;
+
+        $cartProduct = CartProduct::where('cart_id', $user->cart->id)
+            ->where('product_id', $product->id)
+            ->first();
+
+        // 模擬用戶發送一個請求來更新購物車中的商品數量
+        $response = $this->actingAs($user)->putJson("api/cart/{$cartProduct->id}", [
+            'quantity' => $updatedQuantity,
+        ]);
+
+        // 檢查狀態碼和內容
+        $response->assertStatus(201);
+        $response->assertJson([
+            'product_id' => $product->id,
+            'quantity' => $updatedQuantity,
+        ]);
+
+        // 檢查購物車商品的數量
+        $this->assertEquals($updatedQuantity, CartProduct::where('cart_id', $user->cart->id)->first()->quantity);
+    }
+
+    /**
      *  @covers App\Http\Controllers\CartController::show
      *  顯示購物車內容
      */
