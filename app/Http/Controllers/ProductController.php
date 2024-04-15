@@ -43,7 +43,7 @@ class ProductController extends Controller
         $products = $this->productService->search($keyword, $minPrice, $maxPrice, $stock);
 
         // 如果沒有找到商品
-        if ($products->isEmpty()) {
+        if (empty($products)) {
             return response()->json(['message' => 'Product Not Found'], 200);
         }
 

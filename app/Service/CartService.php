@@ -5,8 +5,7 @@ namespace App\Service;
 use App\Exceptions\ForbiddenException;
 use App\Models\Cart;
 use App\Models\CartProduct;
-
-use function PHPUnit\Framework\isEmpty;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class CartService
 {
@@ -35,10 +34,8 @@ class CartService
     // 檢查購物車是否有商品
     public function checkCartProductExist($cartProducts)
     {
-        if (isEmpty($cartProducts)) {
-            return response()->json([
-                'message' => '購物車是空的，請先加入商品',
-            ], 400);
+        if ($cartProducts->isEmpty()) {
+            throw new BadRequestException('購物車是空的，請先加入商品');
         }
     }
 }

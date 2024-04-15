@@ -9,7 +9,6 @@ use App\Service\CartService;
 use App\Http\Resources\CartResource;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
-use function PHPUnit\Framework\isEmpty;
 
 /**
  * @group 購物車 management
