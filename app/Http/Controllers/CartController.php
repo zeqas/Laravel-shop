@@ -154,7 +154,11 @@ class CartController extends Controller
      */
     public function destroy(int $productId)
     {
+        $userId = auth()->user()->id;
+        $cartId = Cart::query()->where('user_id', $userId)->value('id');
+
         CartProduct::query()
+            ->where('cart_id', $cartId)
             ->where('product_id', $productId)
             ->delete();
 
