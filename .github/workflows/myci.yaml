@@ -75,6 +75,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+      - name: Install Dependencies(WHY AGAIN??)
+        run: composer install
       - name: Copy .env
         run: cp .env.example .env
       - name: Generate Key
