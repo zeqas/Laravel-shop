@@ -1,18 +1,68 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  run-syntax-check:
+    runs-on: ubuntu-latest
+    container: php:8.3-fpm
+    steps:
+      - uses: actions/checkout@v3
+      - name: 執行語法檢查
+        run: |
+          find ./tests -name '*.php' -print0 | xargs -0 -n1 php -l
+
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
+    needs: run-syntax-check
+    container:
+      image: php:8.3-fpm
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - name: 安裝依賴
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          apt-get update && apt-get install -y \
+          libzip-dev \
+          libonig-dev \
+          build-essential \
+          libpng-dev \
+          libjpeg62-turbo-dev \
+          libfreetype6-dev \
+          locales \
+          zip \
+          jpegoptim optipng pngquant gifsicle \
+          vim \
+          unzip \
+          git \
+          curl \
+          default-mysql-client
+      - name: 安裝 PHP 擴展
+        run: |
+          docker-php-ext-install pdo_mysql mbstring zip exif pcntl
+          docker-php-ext-configure gd --with-jpeg=/usr/include/ --with-freetype=/usr/include/
+          docker-php-ext-install gd
+      - name: 安裝 Xdebug
+        run: |
+          pecl install xdebug
+          docker-php-ext-enable xdebug
+      - name: 安裝 composer
+        run: |
+          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          php composer-setup.php
+          php -r "unlink('composer-setup.php');"
+          mv composer.phar /usr/local/bin/composer
+      - uses: actions/checkout@v3
+      - name: 使用 composer 安裝套件
+        run: |
+          composer install
+      - name: 執行測試
+        run: |
+          XDEBUG_MODE=coverage composer test
+      - name: 上傳測試報告
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report
+          path: html-coverage
