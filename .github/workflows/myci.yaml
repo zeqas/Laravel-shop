@@ -70,6 +70,12 @@ jobs:
           MYSQL_ROOT_PASSWORD: 1Qaz2Wsx
         ports:
           - "3306"
+      steps:
+        - name: Wait for MySQL to be ready
+          run: dockerize -wait tcp://localhost:3306 -timeout 1m
+        - name: Create Database
+          run: |
+            mysql -h
 
   Start-test:
     runs-on: ubuntu-latest
