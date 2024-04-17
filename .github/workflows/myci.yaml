@@ -64,9 +64,8 @@ jobs:
     needs: Database-create
     services:
       mysql:
-        image: mysql:8-oracle
-        platform: linux/amd64
-        environment:
+        image: mysql:8.0
+        env:
           MYSQL_DATABASE: docker
           MYSQL_ROOT_PASSWORD: 1Qaz2Wsx
         ports:
