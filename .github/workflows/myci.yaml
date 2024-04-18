@@ -100,7 +100,7 @@ jobs:
         run: php artisan migrate
       - name: 執行測試
         run: |
-          XDEBUG_MODE=coverage composer test
+          XDEBUG_MODE=coverage composer test --coverage-html html-coverage/
       - name: 上傳測試報告
         uses: actions/upload-artifact@v4
         with:
