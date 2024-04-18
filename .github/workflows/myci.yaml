@@ -10,16 +10,24 @@ jobs:
   run-syntax-check:
     runs-on: ubuntu-latest
     container: php:8.3-fpm
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: 1Qaz2Wsx
+          MYSQL_DATABASE: docker
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=10s
+          --health-retries=10
     env:
       DB_DATABASE: docker
       DB_USER: root
       DB_PASSWORD: 1Qaz2Wsx
     steps:
-      - name: Start MySQL
-        run: |
-          /etc/init.d/mysql start
-          mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
-
       - uses: actions/checkout@v3
       - name: 執行語法檢查
         run: |
