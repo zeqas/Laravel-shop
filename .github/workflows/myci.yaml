@@ -79,6 +79,8 @@ jobs:
   Start-test:
     runs-on: ubuntu-latest
     needs: PHP-Env-Install
+    container:
+      image: php:8.3-fpm
     env:
       DB_DATABASE: docker
       DB_USER: root
