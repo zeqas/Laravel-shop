@@ -41,6 +41,35 @@ class CartControllerTest extends TestCase
     }
 
     /**
+     *  如果購物車已經有該商品，將再加上數量 成功
+     */
+    public function test_store_add_quantity_success()
+    {
+        // 創建一個用戶和一個商品
+        $user = User::factory()->create(['role' => 'customer']);
+        $cart = Cart::factory()->create(['user_id' => $user->id]);
+        $product = Product::factory()->create();
+
+        // 第一次呼叫 postJson
+        $this->actingAs($user)->postJson('api/cart', [
+            'product_id' => $product->id,
+            'quantity' => 1,
+        ]);
+
+        $response = $this->actingAs($user)->postJson('api/cart', [
+            'product_id' => $product->id,
+            'quantity' => 2,
+        ]);
+
+        // 檢查狀態碼和內容
+        $response->assertStatus(201);
+        $response->assertJson([
+            'product_id' => $product->id,
+            'quantity' => 3,
+        ]);
+    }
+
+    /**
      *  將購物車中的商品更新數量 成功
      */
     public function test_update_success()
