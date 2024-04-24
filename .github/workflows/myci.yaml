@@ -34,7 +34,7 @@ jobs:
           find ./tests -name '*.php' -print0 | xargs -0 -n1 php -l
           find ./app -name '*.php' -print0 | xargs -0 -n1 php -l
 
-  PHP-Env-Install:
+  PHP-Env-Install-And-Test:
     runs-on: ubuntu-latest
     needs: run-syntax-check
     container:
@@ -107,3 +107,30 @@ jobs:
         with:
           name: code-coverage-report
           path: html-coverage
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: PHP-Env-Install-And-Test
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: 下載 test report
+        uses: actions/download-artifact@v4
+        with:
+          name: code-coverage-report
+          path: html-coverage
+      - name: 準備要部署的檔案
+        run: |
+          mkdir public
+          cp -r html-coverage public/.
+      - name: 上傳到 artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
