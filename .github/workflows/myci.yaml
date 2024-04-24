@@ -99,6 +99,8 @@ jobs:
         run: php artisan key:generate
       - name: Migrate Database
         run: php artisan migrate
+      - name: 生成 API 文件
+        run: php artisan scribe:generate
       - name: 執行測試
         run: |
           XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html html-coverage/
@@ -107,6 +109,11 @@ jobs:
         with:
           name: code-coverage-report
           path: html-coverage
+      - name: 上傳 API 文件
+        uses: actions/upload-artifact@v4
+        with:
+          name: documents
+          path: public/docs
 
   deploy:
     runs-on: ubuntu-latest
@@ -123,6 +130,10 @@ jobs:
         with:
           name: code-coverage-report
           path: html-coverage
+      - name: 生成 API 文件
+        run: |
+          mkdir documents
+          cp -r public/docs documents/.
       - name: 準備要部署的檔案
         run: |
           mkdir public
