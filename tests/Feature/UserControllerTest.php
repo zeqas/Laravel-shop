@@ -11,7 +11,6 @@ class UserControllerTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     * @covers App\Http\Controllers\UserController::register
      * 註冊 成功
      */
     public function test_register_success()
@@ -36,7 +35,6 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * @covers App\Http\Controllers\UserController::login
      * 登入 成功
      */
     public function test_login_success()
@@ -65,7 +63,6 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * @covers App\Http\Controllers\UserController::login
      * 登入 失敗
      */
     public function test_login_fail()
@@ -83,7 +80,6 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * @covers App\Http\Controllers\UserController::me
      * 取得使用者資訊 成功
      */
     public function test_me_success()
@@ -100,7 +96,6 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * @covers App\Http\Controllers\UserController::me
      * 取得使用者資訊 無效 token 失敗
      */
     public function test_me_fail()

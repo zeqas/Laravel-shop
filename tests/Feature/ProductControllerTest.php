@@ -12,7 +12,6 @@ class ProductControllerTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     *  @covers App\Http\Controllers\ProductController::index
      *  取得所有商品列表 成功
      */
     public function test_index_success()
@@ -47,7 +46,6 @@ class ProductControllerTest extends TestCase
     }
 
     /**
-     * @covers App\Http\Controllers\ProductController::index
      * 無法取得特定商品資訊 因為找不到商品
      */
     public function test_index_find_fail()
@@ -61,7 +59,6 @@ class ProductControllerTest extends TestCase
     }
 
     /**
-     *  @covers App\Http\Controllers\ProductController::store
      *  新增商品 成功
      */
     public function test_store_success()
@@ -83,7 +80,6 @@ class ProductControllerTest extends TestCase
     }
 
     /**
-     *  @covers App\Http\Controllers\ProductController::update
      *  更新商品 成功
      */
     public function test_update_success()
@@ -110,7 +106,6 @@ class ProductControllerTest extends TestCase
     }
 
     /**
-     *  @covers App\Http\Controllers\ProductController::destroy
      *  刪除商品 成功
      */
     public function test_destroy_success()

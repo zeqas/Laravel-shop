@@ -14,7 +14,6 @@ use Tests\TestCase;
 class OrderControllerTest extends TestCase
 {
     /**
-     * @covers App\Http\Controllers\OrderController::index
      * 訂單列表
      */
     public function test_index(): void

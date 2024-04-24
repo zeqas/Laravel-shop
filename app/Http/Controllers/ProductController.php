@@ -70,14 +70,6 @@ class ProductController extends Controller
     }
 
     /**
-     * 商品詳細資訊
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * 更新商品資訊
      * @bodyParam name string 限制100字元
      * @bodyParam price integer 限制1以上

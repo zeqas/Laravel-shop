@@ -14,7 +14,6 @@ class CartControllerTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     *  @covers App\Http\Controllers\CartController::store
      *  將商品加入購物車 成功
      */
     public function test_store_success()
@@ -42,7 +41,6 @@ class CartControllerTest extends TestCase
     }
 
     /**
-     *  @covers App\Http\Controllers\CartController::update
      *  將購物車中的商品更新數量 成功
      */
     public function test_update_success()
@@ -80,7 +78,6 @@ class CartControllerTest extends TestCase
     }
 
     /**
-     *  @covers App\Http\Controllers\CartController::show
      *  顯示購物車內容
      */
     public function test_show_success()
@@ -129,7 +126,6 @@ class CartControllerTest extends TestCase
     }
 
     /**
-     *  @covers App\Http\Controllers\CartController::destroy
      *  刪除購物車特定商品
      */
     public function test_destroy_success()
@@ -157,7 +153,6 @@ class CartControllerTest extends TestCase
     }
 
     /**
-     *  @covers App\Http\Controllers\CartController::clear
      *  清空購物車所有商品
      */
     public function test_clear_success()
@@ -180,7 +175,6 @@ class CartControllerTest extends TestCase
     }
 
     /**
-     *  @covers App\Http\Controllers\CartController::checkout
      *  建立訂單 成功
      */
     public function test_checkout_success()
@@ -202,7 +196,6 @@ class CartControllerTest extends TestCase
     }
 
     /**
-     *  @covers App\Http\Controllers\CartController::checkout
      *  庫存不足
      */
     public function test_checkout_insufficient_stock()
