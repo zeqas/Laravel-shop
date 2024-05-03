@@ -2,6 +2,10 @@
 
 這是一個使用 Laravel 建立的簡易電商系統。
 
+[測試報告](https://zeqas.github.io/Laravel-shop/html-coverage/)
+
+[API 文件](https://zeqas.github.io/Laravel-shop/docs/)
+
 ## 環境要求
 
 -   PHP >= 8.2
@@ -74,9 +78,6 @@ php artisan db:seed
 -   刪除商品：從系統中移除商品。
 
 -   用戶註冊與登錄
-
-## 待完成功能
-
 -   購物車功能
 -   簡易結算流程
 -   管理員後台（商品管理、訂單管理）
@@ -92,17 +93,14 @@ php artisan db:seed
     -   Migration
     -   Seeder
     -   資料 Model 之間的 relation
-    -   Schedule (Optional)
-        -   API 分層 (Controller, Service, Repository)
+    -   API 分層 (Controller, Service)
 
--   docker-compose.yml [MySQL + PHP + Redis] (Optional)
--   API Test
--   API Doc
+-   docker-compose.yml [MySQL + PHP + Nginx]
+-   API Test (PHPUnit)
+-   API Doc (Scribe)
 -   CI Github Action (跑測試 + 產生 API 文件傳到 Github page)
 
 -   MySQL
--   Bootstrap
--   jQuery
 
 ## 授權
 
